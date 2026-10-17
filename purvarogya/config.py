@@ -62,7 +62,7 @@ MISSING_CODES = {
 LOW_MISSING_COLUMNS = ["genhlth", "_totinda", "menthlth", "physhlth", "bphigh6", "_educag", "_ageg5yr"]
 
 # Columns with >= 5% missing: impute, but only AFTER the train/test split,
-# fitting on the training rows only (course rule: no test information in preprocessing)
+# fitting on the training rows only (no test information may leak into preprocessing)
 IMPUTE_MEDIAN = ["_bmi5", "_drnkwk2"]
 IMPUTE_MODE = ["_smoker3", "_rfchol3", "income3"]
 

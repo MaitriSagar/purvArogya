@@ -64,7 +64,7 @@ _ageg5yr, _sex, income3, _educag`
 - 427,034 rows -> 397,478 rows after dropping (about 7% lost). Class proportions stayed about the
   same (diabetes ~16%, CVD ~8.3%, stroke ~4.0%), so the dropping did not bias the targets.
 - **Data leakage fix:** my first version computed the median / mode on the whole dataset
-  before the split. The course rules say preprocessing must be fitted on training data only,
+  before the split. Preprocessing must be fitted on training data only,
   so the imputation now lives in `build_imputer()` and is fitted on `X_train` only.
   (Covered by a unit test in `tests/test_preprocessing.py`.)
 
