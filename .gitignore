@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter / Colab
+.ipynb_checkpoints/
+
+# Secrets - NEVER commit these
+.env
+kaggle.json
+access_token
+.kaggle/
+.streamlit/secrets.toml
+
+# Data (big, and re-downloadable from Kaggle)
+data/
+*.csv
+*.zip
+*.parquet
+
+# Saved models are committed on purpose (the app needs them), so models/ is NOT ignored.
+# If a model file gets too big for GitHub (100 MB limit), add it here instead.
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
