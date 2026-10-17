@@ -2,8 +2,6 @@
 
 **A multi-risk health screening system: Diabetes, Cardiovascular Disease and Stroke, predicted independently from one population survey.**
 
-Course project for **ECSCI24302 - Machine Learning Essentials**, Adani University (B.Tech CSE AI/ML). Solo project, approved by the course instructor.
-
 ---
 
 ## The Problem
@@ -96,6 +94,3 @@ Random Forest and XGBoost land within 0.007 ROC-AUC of this, so the 13 survey fe
 - **No data leakage:** imputation is fitted on training data only, and leakage columns like `diabage4` are excluded.
 - **Training and app share one cleaning module**, so a user's form input is processed exactly like the training data.
 
-## Author
-
-Maitri, B.Tech CSE (AI/ML), Adani University.
