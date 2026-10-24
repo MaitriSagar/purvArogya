@@ -1,7 +1,6 @@
 # Decisions Log
 
-Every choice I made in this project, with the reason. I keep this updated as I go, so the
-report and the viva answers come straight from here.
+Every choice I made in this project, with the reason. I keep this updated as I go.
 
 ---
 
@@ -98,12 +97,34 @@ training pipeline) and kept class weights: simpler, and no synthetic rows.
   days of poor health, higher drinks). No lab values or family history are available.
 
 ## 11. App decisions
-- Show a risk flag (the 0.5 cut-off that was evaluated) and the percentile of the score among
-  the training people. No "X% chance", because class weights inflate the scores.
-- All 13 inputs are required, and they must be in the training format (BMI as real BMI,
-  bphigh6 as 0/1/2, drinks per week as real drinks, age as group 1-13).
+- Show a "Lower / Moderate / Higher range" card per disease with a gauge, not an "X% chance". Class weights
+  inflate the scores, so a percentage would be wrong. The gauge position is the percentile of the score among
+  the training people, and the Higher zone starts exactly at the flag line (score above 0.5, the cut-off I
+  evaluated in the notebook).
+- "What pushed the score" = logistic regression coefficient x the person's scaled value, compared with an
+  average person. Drinks, smoking and the days of poor health are not listed: drinks has a negative link
+  (sick people may drink less) and the days columns overlap with general health, so listing them would mislead.
+  They still count in the score.
+- One question per screen (welcome, 6 questions, 1 optional screen, results). Thirteen questions on one page was
+  too much for a screening tool. Six are required (age, sex, height and weight, general health, blood pressure,
+  cholesterol). Seven are optional (smoking, exercise, drinks, days of poor physical and mental health, income,
+  education).
+- A skipped optional question uses the most common answer in the survey (mode, or median for numbers), the same
+  value the training imputer fills in. Cholesterol "Not sure" is treated the same way. The results page says which
+  questions were skipped.
+- The cost of skipping is measured, not assumed (ablation cell in the notebook).
+- Warm, friendly look (Nunito font, cream and coral palette, rounded cards), picked from the options I offered.
+  A second tab, "How it was built", shows the model comparison, class weights, odds ratios and limits, with the
+  numbers copied from the notebook.
+- "Start again" bumps a counter that is part of every widget key, so every box really clears. Deleting the
+  session keys left the old answers on screen.
+- Inputs outside what the model saw (BMI under 12 or over 100) are refused. Drinks are capped at 50 a week.
+- The page shows the real test numbers in plain words (flags that are right: 34 / 21 / 10 in 100).
+- `.streamlit/config.toml` forces the light theme, and the CSS also paints the page itself, so it stays readable
+  when the browser is in dark mode.
 - Pin scikit-learn==1.6.1 so the saved models load.
 
 ## 12. Still open
 - Confirm `_drnkwk2` x 100 and `_ageg5yr` code 14 in the CDC codebook.
+- Put the measured cost of skipping the optional questions into the app accuracy panel.
 - Optional: ablation without `_sex` / `_educag`, wider tuning grid (C = 0.001, depth 2).
