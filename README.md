@@ -35,37 +35,55 @@ All three targets are imbalanced, so the models are judged on precision, recall,
 | Train-test split (70/30, stratified), feature selection (ANOVA / Cramer's V) | Done |
 | Baseline, 3+ models, tuning, class imbalance | Done |
 | Final comparison table with cross-validation, interpretation, error analysis | Done |
-| Streamlit app | To do |
+| Web app | In progress |
 | Final report | To do |
 
 Every modelling decision and its reason is written in [`docs/DECISIONS.md`](docs/DECISIONS.md).
 
 ## Tech Stack
 
-Python, pandas, NumPy, scikit-learn, imbalanced-learn, XGBoost, Matplotlib, Seaborn, Streamlit. Developed on Google Colab. Traditional ML only (no deep learning).
+Python, pandas, NumPy, scikit-learn, imbalanced-learn, XGBoost, Matplotlib, Seaborn, FastAPI, Uvicorn. Developed on Google Colab. Traditional ML only (no deep learning).
 
 ## Repository Anatomy
 
 ```
 purvArogya/
-├── purvarogya/             # reusable code (used by notebooks AND the app)
+├── api/                    # FastAPI backend and schemas
+├── web/                    # frontend (HTML, CSS, JS) served by FastAPI
+├── purvarogya/             # reusable ML core (preprocessing, inputs, scoring)
 │   ├── config.py           # features, targets, BRFSS code maps, cleaning rules
-│   └── preprocessing.py    # cleaning functions + train-only imputer
+│   ├── inputs.py           # mapping user answers to model feature rows
+│   ├── preprocessing.py    # cleaning functions + train-only imputer
+│   └── scoring.py          # scoring, percentiles, risk levels, factor drivers
 ├── notebooks/              # the full modelling notebook (purvarogya.ipynb)
-├── app/                    # Streamlit app
-├── models/                 # saved trained models
+├── models/                 # saved trained models (joblib)
 ├── docs/                   # decisions log, figures, report sections
-├── tests/                  # pytest tests for the preprocessing rules
-├── requirements.txt        # what the app needs
-├── requirements-dev.txt    # notebook + tests
+├── tests/                  # pytest test suite
+├── requirements.txt        # runtime dependencies
+├── requirements-dev.txt    # test dependencies
 └── README.md
 ```
 
-## Quickstart
+## Run the App
 
-```bash
-pip install -r requirements-dev.txt   # notebook + tests (the app only needs requirements.txt)
-python -m pytest                      # checks the cleaning rules
+Start the server:
+
+```powershell
+python -m uvicorn api.main:app --reload
+```
+
+Pages:
+- `/` - screening form
+- `/docs` - interactive API documentation
+
+Endpoints:
+- `GET /health` - check server status and loaded models
+- `POST /predict` - submit answers and get risk assessment
+
+Run tests:
+
+```powershell
+python -m pytest
 ```
 
 The raw dataset is not stored in this repo (it is large and free to download). To get it, create a Kaggle API token and store it as a **Colab Secret** (never paste it into a notebook cell), then:

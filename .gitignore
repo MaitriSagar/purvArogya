@@ -19,7 +19,6 @@ env/
 kaggle.json
 access_token
 .kaggle/
-.streamlit/secrets.toml
 
 # Data (big, and re-downloadable from Kaggle)
 data/

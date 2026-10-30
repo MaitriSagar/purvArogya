@@ -97,32 +97,17 @@ training pipeline) and kept class weights: simpler, and no synthetic rows.
   days of poor health, higher drinks). No lab values or family history are available.
 
 ## 11. App decisions
-- Show a "Lower / Moderate / Higher range" card per disease with a gauge, not an "X% chance". Class weights
-  inflate the scores, so a percentage would be wrong. The gauge position is the percentile of the score among
-  the training people, and the Higher zone starts exactly at the flag line (score above 0.5, the cut-off I
-  evaluated in the notebook).
-- "What pushed the score" = logistic regression coefficient x the person's scaled value, compared with an
-  average person. Drinks, smoking and the days of poor health are not listed: drinks has a negative link
-  (sick people may drink less) and the days columns overlap with general health, so listing them would mislead.
-  They still count in the score.
-- One question per screen (welcome, 6 questions, 1 optional screen, results). Thirteen questions on one page was
-  too much for a screening tool. Six are required (age, sex, height and weight, general health, blood pressure,
-  cholesterol). Seven are optional (smoking, exercise, drinks, days of poor physical and mental health, income,
-  education).
-- A skipped optional question uses the most common answer in the survey (mode, or median for numbers), the same
-  value the training imputer fills in. Cholesterol "Not sure" is treated the same way. The results page says which
-  questions were skipped.
-- The cost of skipping is measured, not assumed (ablation cell in the notebook).
-- Warm, friendly look (Nunito font, cream and coral palette, rounded cards), picked from the options I offered.
-  A second tab, "How it was built", shows the model comparison, class weights, odds ratios and limits, with the
-  numbers copied from the notebook.
-- "Start again" bumps a counter that is part of every widget key, so every box really clears. Deleting the
-  session keys left the old answers on screen.
-- Inputs outside what the model saw (BMI under 12 or over 100) are refused. Drinks are capped at 50 a week.
-- The page shows the real test numbers in plain words (flags that are right: 34 / 21 / 10 in 100).
-- `.streamlit/config.toml` forces the light theme, and the CSS also paints the page itself, so it stays readable
-  when the browser is in dark mode.
-- Pin scikit-learn==1.6.1 so the saved models load.
+- **FastAPI backend with static frontend:** I chose FastAPI for three reasons: request validation with Pydantic, automatic interactive docs at `/docs`, and one app serving both the API and the page.
+- **Flag, percentile, and level (never a probability):** The models use balanced class weights, which artificially inflate the raw predicted scores, so they are not real probabilities. Instead, the app shows:
+  - a flag (whether the score crosses the 0.5 threshold evaluated in the notebook),
+  - a percentile showing where the score sits among the survey respondents (0 to 99), and
+  - a risk level ("Lower", "Moderate", or "Higher") relative to the cohort.
+- **Why income and education are not asked:** Income and education are not asked in the questionnaire because they feel intrusive in a rapid health screening tool. Instead, typical survey values (imputed defaults) are filled in internally. This is an honest known limitation.
+- **Why income and education are hidden from the reasons list:** Because the user is never asked about income and education, showing either as a factor that pushed their risk up or down would be confusing and unhelpful. They are filtered out from `pushing_up` and `pulling_down`.
+- **Score drivers:** "What pushed the score" uses the logistic regression coefficient multiplied by the person's scaled value relative to the training average. Drinks, smoking, and days of poor health are excluded from the list: drinks has a negative association (sick people may drink less) and the days columns overlap with general health, so listing them would mislead. They still count in the overall score.
+- **One question per screen:** Six questions are required (age, sex, height and weight, general health, blood pressure, cholesterol). Optional lifestyle questions (smoking, physical activity, drinks, mental/physical health days) can be answered or skipped.
+- **Validation:** Inputs outside what the model was trained on (BMI under 12 or over 100) are rejected by Pydantic before scoring. Drinks are capped at 50 per week.
+- **Pinned dependency:** `scikit-learn==1.6.1` is strictly pinned so the serialized joblib pipelines load cleanly.
 
 ## 12. Still open
 - Confirm `_drnkwk2` x 100 and `_ageg5yr` code 14 in the CDC codebook.
