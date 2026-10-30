@@ -3,7 +3,7 @@ const answers = {};
 
 const screens = document.querySelectorAll(".screen");
 const progress = document.getElementById("progress");
-const questionCount = screens.length - 1; // the welcome screen is not a question
+const questionCount = screens.length - 2; // welcome and results are not questions
 let current = 0;
 
 // one bar per question screen
@@ -16,7 +16,7 @@ function show(index) {
   current = index;
   screens.forEach((screen, i) => screen.classList.toggle("active", i === index));
   progress.classList.toggle("hidden", index === 0);
-  [...progress.children].forEach((bar, i) => bar.classList.toggle("done", i < index));
+ [...progress.children].forEach((bar, i) => bar.classList.toggle("done", i < index - 1));
   window.scrollTo(0, 0);
 }
 
@@ -72,6 +72,71 @@ function checkBody() {
 heightInput.addEventListener("input", checkBody);
 weightInput.addEventListener("input", checkBody);
 
+// optional questions: a blank field means skipped, so we leave the key out
+const optionalKinds = {
+  smoking: "text", activity: "text",
+  drinks: "number", physical_days: "number", mental_days: "number",
+};
+const optionalError = document.getElementById("optional-error");
+const resultsBody = document.getElementById("results-body");
+
+const diseaseNames = { diabetes: "Diabetes", cvd: "Heart disease", stroke: "Stroke" };
+
+function readOptional() {
+  optionalError.textContent = "";
+  for (const [key, kind] of Object.entries(optionalKinds)) {
+    const input = document.getElementById(key);
+    delete answers[key];
+    if (input.value === "") continue;
+    if (kind === "number") {
+      const value = Number(input.value);
+      const max = Number(input.max);
+      const wholeDays = key !== "drinks";
+      if (value < 0 || value > max || (wholeDays && !Number.isInteger(value))) {
+        optionalError.textContent = "Please check the numbers. Drinks go up to 50, days up to 30.";
+        return false;
+      }
+      answers[key] = value;
+    } else {
+      answers[key] = input.value;
+    }
+  }
+  return true;
+}
+
+function renderResults(data) {
+  resultsBody.innerHTML = "";
+  for (const [key, name] of Object.entries(diseaseNames)) {
+    const r = data[key];
+    const card = document.createElement("div");
+    card.className = "result";
+    card.innerHTML = `
+      <h3>${name}</h3>
+      <p><span class="level">${r.level}</span>, higher than about ${r.percentile} in 100 people in the survey.</p>
+      <p>Pushing it up: ${r.pushing_up.join(", ") || "nothing stands out"}</p>
+      <p>Pulling it down: ${r.pulling_down.join(", ") || "nothing stands out"}</p>`;
+    resultsBody.appendChild(card);
+  }
+}
+
+document.getElementById("see-results").addEventListener("click", async () => {
+  if (!readOptional()) return;
+  show(current + 1);
+  resultsBody.textContent = "Working it out...";
+  try {
+    const response = await fetch("/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(answers),
+    });
+    if (!response.ok) throw new Error("server said " + response.status);
+    renderResults(await response.json());
+  } catch (error) {
+    resultsBody.textContent = "Something went wrong. Please try again.";
+    console.error(error);
+  }
+});
+
 // one click handler for every button on the page
 document.addEventListener("click", (event) => {
   const choice = event.target.closest(".choice");
@@ -84,6 +149,7 @@ document.addEventListener("click", (event) => {
   }
   if (event.target.closest("[data-next]")) show(current + 1);
   if (event.target.closest("[data-back]")) show(current - 1);
+    if (event.target.closest("[data-restart]")) location.reload();
 });
 
 show(0);

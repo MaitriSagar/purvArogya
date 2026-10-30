@@ -104,6 +104,51 @@
   </div>
   <div class="nav"><button class="ghost" data-back>Back</button></div>
 </section>
+
+<section class="screen">
+  <h2>A few optional questions</h2>
+  <p class="hint">These help a little. Leave anything blank to skip it.</p>
+  <div class="fields">
+    <label>Do you smoke?
+      <select class="number-input" id="smoking">
+        <option value="">Skip</option>
+        <option value="Every day">Every day</option>
+        <option value="Some days">Some days</option>
+        <option value="Used to">I used to, but quit</option>
+        <option value="Never">Never</option>
+      </select>
+    </label>
+    <label>In the past month, did you do any physical activity outside your job?
+      <select class="number-input" id="activity">
+        <option value="">Skip</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </label>
+    <label>Alcoholic drinks in a typical week
+      <input class="number-input" id="drinks" type="number" inputmode="decimal" min="0" max="50" placeholder="0 to 50">
+    </label>
+    <label>Days in the past 30 your physical health was not good
+      <input class="number-input" id="physical_days" type="number" inputmode="numeric" min="0" max="30" placeholder="0 to 30">
+    </label>
+    <label>Days in the past 30 your mental health was not good
+      <input class="number-input" id="mental_days" type="number" inputmode="numeric" min="0" max="30" placeholder="0 to 30">
+    </label>
+  </div>
+  <p class="error" id="optional-error"></p>
+  <div class="nav">
+    <button class="ghost" data-back>Back</button>
+    <button class="pill" id="see-results">See my results</button>
+  </div>
+</section>
+
+<section class="screen" id="results">
+  <h2>Your results</h2>
+  <div id="results-body"></div>
+  <div class="nav">
+    <button class="ghost" data-restart>Start over</button>
+  </div>
+</section>
   </main>
   <script src="/static/app.js"></script>
 </body>
