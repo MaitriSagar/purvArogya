@@ -1,5 +1,5 @@
 """All dataset-specific choices live here, so the notebooks, training code and
-the Streamlit app all use exactly the same rules.
+the web app all use exactly the same rules.
 
 Every code below was checked against the value counts in BRFSS2023.csv and the
 CDC BRFSS codebook (see docs/DECISIONS.md). Column names are lowercase in this file.

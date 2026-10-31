@@ -1,7 +1,7 @@
 """Turns one person's answers into what the app shows: a flag, a percentile and the
 factors that pushed the score up or down.
 
-It lives in the package (not in the app file) so it can be tested without Streamlit.
+It lives in the package (not in the app file) so it can be tested without the web app.
 """
 
 import numpy as np

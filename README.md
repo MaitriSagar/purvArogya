@@ -2,6 +2,9 @@
 
 **A multi-risk health screening system: Diabetes, Cardiovascular Disease and Stroke, predicted independently from one population survey.**
 
+Live demo: <https://purvarogya.onrender.com>  
+*(The free Render plan sleeps after inactivity, so the first visit can take about a minute to wake.)*
+
 ---
 
 ## The Problem
@@ -35,7 +38,7 @@ All three targets are imbalanced, so the models are judged on precision, recall,
 | Train-test split (70/30, stratified), feature selection (ANOVA / Cramer's V) | Done |
 | Baseline, 3+ models, tuning, class imbalance | Done |
 | Final comparison table with cross-validation, interpretation, error analysis | Done |
-| Web app | In progress |
+| Web app | Done |
 | Final report | To do |
 
 Every modelling decision and its reason is written in [`docs/DECISIONS.md`](docs/DECISIONS.md).
@@ -57,7 +60,7 @@ purvArogya/
 │   └── scoring.py          # scoring, percentiles, risk levels, factor drivers
 ├── notebooks/              # the full modelling notebook (purvarogya.ipynb)
 ├── models/                 # saved trained models (joblib)
-├── docs/                   # decisions log, figures, report sections
+├── docs/                   # decisions log, figures, screenshots
 ├── tests/                  # pytest test suite
 ├── requirements.txt        # runtime dependencies
 ├── requirements-dev.txt    # test dependencies
@@ -91,6 +94,24 @@ The raw dataset is not stored in this repo (it is large and free to download). T
 ```bash
 kaggle datasets download -d isuruprabath/brfss-2023-csv-dataset
 ```
+
+## Screenshots
+
+### Welcome screen
+![Welcome screen](docs/images/welcome.png)
+
+### A question
+![A question](docs/images/question.png)
+
+### Two example results
+![Example result 1](docs/images/results_1.png)
+
+![Example result 2](docs/images/results_2.png)
+
+### The "How it was built" page
+!["How it was built" page](docs/images/about.png)
+
+*Note: The numbers on the "How it was built" page live in `web/about.js` and were copied from the notebook ([`notebooks/purvarogya.ipynb`](notebooks/purvarogya.ipynb)), so they must be updated together if the models are ever retrained.*
 
 ## Results
 

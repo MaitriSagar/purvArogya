@@ -73,3 +73,15 @@ def test_unknown_choice_is_rejected(client):
 def test_missing_required_answer_is_rejected(client):
     person = {k: v for k, v in VALID_PERSON.items() if k != "blood_pressure"}
     assert client.post("/predict", json=person).status_code == 422
+
+
+def test_home_page_returns_html(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "PurvAarogya" in response.text
+
+
+def test_static_assets_return_ok(client):
+    for path in ("/static/app.js", "/static/style.css"):
+        response = client.get(path)
+        assert response.status_code == 200

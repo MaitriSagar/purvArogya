@@ -98,11 +98,14 @@ training pipeline) and kept class weights: simpler, and no synthetic rows.
 
 ## 11. App decisions
 - **FastAPI backend with static frontend:** I chose FastAPI for three reasons: request validation with Pydantic, automatic interactive docs at `/docs`, and one app serving both the API and the page.
+- **"How it was built" tab and `web/about.js`:** The numbers on the "How it was built" page live in `web/about.js`. The reason is that the numbers are the notebook's fixed test results, shown in one place, and they change only if the models are retrained.
+- **Sex question:** Sex is asked as male or female because the survey the models learned from recorded sex as male or female.
 - **Flag, percentile, and level (never a probability):** The models use balanced class weights, which artificially inflate the raw predicted scores, so they are not real probabilities. Instead, the app shows:
   - a flag (whether the score crosses the 0.5 threshold evaluated in the notebook),
   - a percentile showing where the score sits among the survey respondents (0 to 99), and
   - a risk level ("Lower", "Moderate", or "Higher") relative to the cohort.
-- **Why income and education are not asked:** Income and education are not asked in the questionnaire because they feel intrusive in a rapid health screening tool. Instead, typical survey values (imputed defaults) are filled in internally. This is an honest known limitation.
+- **Results message:** The advice message on the results page changes depending on whether any disease is flagged. It suggests speaking to a doctor if something is flagged, or notes that nothing is flagged right now. It never describes anyone as "healthy" (a screening is not a diagnosis and cannot guarantee health) and never gives a probability.
+- **Why income and education are not asked:** Income and education describe a person's background, not their health, so I decided not to ask for them. The models were still trained on them (income lowers the risk a little in the odds ratios), so typical survey values are filled in internally. This is a known limitation.
 - **Why income and education are hidden from the reasons list:** Because the user is never asked about income and education, showing either as a factor that pushed their risk up or down would be confusing and unhelpful. They are filtered out from `pushing_up` and `pulling_down`.
 - **Score drivers:** "What pushed the score" uses the logistic regression coefficient multiplied by the person's scaled value relative to the training average. Drinks, smoking, and days of poor health are excluded from the list: drinks has a negative association (sick people may drink less) and the days columns overlap with general health, so listing them would mislead. They still count in the overall score.
 - **One question per screen:** Six questions are required (age, sex, height and weight, general health, blood pressure, cholesterol). Optional lifestyle questions (smoking, physical activity, drinks, mental/physical health days) can be answered or skipped.
