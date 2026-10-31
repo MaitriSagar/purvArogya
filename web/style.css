@@ -133,3 +133,19 @@ h2 { font-size: clamp(24px, 5vw, 30px); line-height: 1.2; margin: 0 0 12px; }
 .tab.active { color: var(--ink); border-bottom-color: var(--accent); }
 .page { display: none; max-width: 680px; margin: 0 auto; }
 .page.active { display: block; }
+
+.page h3 { font-size: 20px; margin: 36px 0 8px; }
+.page p { margin: 0 0 12px; }
+.page ol, .page ul { padding-left: 22px; margin: 0 0 12px; }
+.page li { margin-bottom: 6px; }
+.page a { color: var(--accent); }
+.fineprint { font-size: 14px; color: #667470; margin-top: 28px; }
+
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 15px; }
+.data-table th { text-align: center; font-size: 13px; color: #667470; font-weight: 700; padding: 8px; }
+.data-table td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: center; }
+.data-table th:first-child, .data-table td:first-child { text-align: left; }
+
+.bar { height: 8px; background: var(--line); border-radius: 4px; margin: 0 auto 4px; max-width: 90px; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }

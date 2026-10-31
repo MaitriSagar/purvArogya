@@ -157,9 +157,45 @@
 
 <section class="page" id="about">
   <h2>How it was built</h2>
-  <p class="lead">Three separate logistic regression models, one each for diabetes, heart disease and stroke, trained on the CDC's 2023 BRFSS survey (433,323 respondents, 13 survey answers each).</p>
+  <p class="lead">The machine learning behind the three results, in plain words.</p>
+
+  <h3>The data</h3>
+  <p>The 2023 Behavioral Risk Factor Surveillance System, a health survey run by the US CDC. About 400,000 adults answered it. Each of the three outcomes (diabetes, heart disease and stroke) is predicted by its own model, from the same 13 survey answers. This app asks for 11 of them and fills in typical values for the other two, income and education.</p>
+
+  <h3>How it was done</h3>
+  <ol>
+    <li>Cleaned the survey codes. "Don't know" and "refused" became missing values.</li>
+    <li>Split the people 70 / 30 first, before looking at anything, so the 30% stays untouched.</li>
+    <li>Filled gaps using the 70% only, so nothing leaks from the test group.</li>
+    <li>Scaled the numbers and turned smoking into separate yes / no columns.</li>
+    <li>Compared four models, tuned them with 3-fold cross-validation, then scored them on the 30%.</li>
+  </ol>
+
+  <h3>Which model won</h3>
+  <p>Test ROC-AUC, where 0.5 is a coin flip and 1.0 is perfect.</p>
+  <div class="table-wrap" id="compare-table"></div>
+  <p>The four are within 0.007 of each other, so the simplest one, logistic regression, is in the app. It is easy to explain, and it is what lets the app say which answers pushed your score up.</p>
+
+  <h3>Why class weights matter</h3>
+  <p>Only a few people in the survey have each condition (16 in 100 for diabetes, 8 for heart disease, 4 for stroke). Left alone, a model learns to say "healthy" for almost everyone. Out of 100 people who really have it, this many get flagged:</p>
+  <div class="table-wrap" id="caught-table"></div>
+  <p>The price is more false alarms. It also means the scores are not real chances. That is why the app shows a level and a suggestion to get checked, never a percentage or a diagnosis.</p>
+  <h3>What moves the score most</h3>
+  <p>How much the score rises when an answer goes up by one standard deviation (an odds ratio from the logistic regression). Above 1.00 means a higher score. Longer bars, bigger effect.</p>
+  <div class="table-wrap" id="odds-table"></div>
+
+  <h3>What it cannot do</h3>
+  <ul>
+    <li>It learned from US adults, so it may fit other populations less well.</li>
+    <li>It only sees self-reported answers. No blood tests, no family history.</li>
+    <li>Income and education are not asked, so typical answers are used for them.</li>
+    <li>Most flags are false alarms, especially for stroke, which is rare.</li>
+    <li>It is a screening aid. It cannot replace a doctor.</li>
+  </ul>
+  <p class="fineprint">The full notebook, code and tests are on <a href="https://github.com/MaitriSagar/purvArogya">GitHub</a>.</p>
 </section>
   </main>
+  <script src="/static/about.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>
