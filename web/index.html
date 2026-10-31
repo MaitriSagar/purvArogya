@@ -12,9 +12,13 @@
 <body>
   <main id="app">
     <header class="top">
-      <span class="brand">PurvAarogya</span>
-      <div class="progress hidden" id="progress"></div>
-    </header>
+  <span class="brand">PurvAarogya</span>
+  <nav class="tabs">
+    <button class="tab active" data-view="check">Check my risk</button>
+    <button class="tab" data-view="about">How it was built</button>
+  </nav>
+  <div class="progress hidden" id="progress"></div>
+</header>
 
     <section class="screen active welcome">
   <svg class="pulse" viewBox="0 0 120 40" width="96" aria-hidden="true">
@@ -45,16 +49,16 @@
     </section>
 
     <section class="screen">
-      <h2>What is your gender?</h2>
-      <p class="hint">The survey the models learned from recorded sex as male or female, so those are the options.</p>
-      <div class="choices">
-        <button class="choice" data-field="sex" data-value="Male">Male</button>
-        <button class="choice" data-field="sex" data-value="Female">Female</button>
-      </div>
-      <div class="nav">
-        <button class="ghost" data-back>Back</button>
-      </div>
-    </section>
+  <h2>Are you male or female?</h2>
+  <div class="choices">
+    <button class="choice" data-field="sex" data-value="Male">Male</button>
+    <button class="choice" data-field="sex" data-value="Female">Female</button>
+  </div>
+  <div class="nav">
+    <button class="ghost" data-back>Back</button>
+  </div>
+</section>
+
     <section class="screen">
   <h2>Your height and weight</h2>
   <p class="hint">We use these to work out your body mass index.</p>
@@ -145,9 +149,15 @@
 <section class="screen" id="results">
   <h2>Your results</h2>
   <div id="results-body"></div>
+  <div class="trust" id="results-note"></div>
   <div class="nav">
     <button class="ghost" data-restart>Start over</button>
   </div>
+</section>
+
+<section class="page" id="about">
+  <h2>How it was built</h2>
+  <p class="lead">Three separate logistic regression models, one each for diabetes, heart disease and stroke, trained on the CDC's 2023 BRFSS survey (433,323 respondents, 13 survey answers each).</p>
 </section>
   </main>
   <script src="/static/app.js"></script>
