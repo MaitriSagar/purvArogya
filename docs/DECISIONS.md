@@ -84,7 +84,7 @@ training pipeline) and kept class weights: simpler, and no synthetic rows.
 - Final choice: Logistic Regression, C=0.01, balanced. All models are within 0.007 test ROC-AUC
   (and the cross-validation scores agree), so I pick the simplest one I can explain.
 - Test results (119,244 people): ROC-AUC 0.811 / 0.834 / 0.802, recall 0.763 / 0.793 / 0.772,
-  precision 0.337 / 0.207 / 0.097 for diabetes / CVD / stroke.
+  precision 0.337 / 0.207 / 0.097, F1 0.468 / 0.328 / 0.172 for diabetes / CVD / stroke.
 - Honest note: I looked at test scores while comparing methods (class weights vs SMOTE, models).
   The tuning itself used cross-validation only, and the cross-validation scores show the same ranking.
 
